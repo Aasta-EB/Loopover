@@ -1,19 +1,18 @@
 import java.util.List;
 
 /**
- * Estado del puzzle Loopover 4x4 representado como bitboard en un long sin
- * signo, junto con las acciones que lo transforman en otro estado.
+ * The state of the 4x4 Loopover puzzle represented as a bitboard in an unsigned
+ * long, along with the actions that transform it into another state.
  *
- * Cada casilla ocupa 4 bits: la casilla i (fila i/4, columna i%4) ocupa los
- * bits [i*4, i*4+3], quedando la casilla (0,0) en los bits mas bajos. El
- * estado resuelto vale 0xFEDCBA98_76543210L.
+ * Each cell occupies 4 bits: cell i (row i/4, column i%4) occupies
+ * bits [i*4, i*4+3], with cell (0,0) located at the lowest bits. The
+ * solved state is 0xFEDCBA98_76543210L.
  *
- * Una accion es un movimiento encadenado codificado en 5 bits: los bits 0-1
- * son la fila, los bits 2-3 la columna y el bit 4 vale 1 si el signo es '+'.
- * Con '+' la fila se desplaza a la derecha y la columna hacia abajo; con '-',
- * hacia la izquierda y hacia arriba.
+ * An action is a shift operation encoded in 5 bits: bits 0-1 represent the row,
+ * bits 2-3 the column, and bit 4 is 1 if the sign is '+'. With '+', the row
+ * shifts right and the column shifts down; with '-', they shift left and up.
  *
- * TODO Tarea 1: implementar todos los metodos marcados con TODO.
+ * TODO Task 1: implement all methods marked with TODO.
  */
 public final class Estado {
 
@@ -24,29 +23,29 @@ public final class Estado {
 
     public static final int NUM_ACCIONES = 32;
 
-    // El estado resuelto: ficha i en casilla i → nibble i = i
+    // The solved state: tile i in slot i → nibble i = i
     private static final long BITBOARD_RESUELTO = 0xFEDCBA98_76543210L;
 
-    // Bits de la codificacion de accion
+    // Action coding bits
     private static final int MASCARA_FILA_ACCION    = 0b00011;
     private static final int MASCARA_COLUMNA_ACCION = 0b01100;
     private static final int BIT_SIGNO_ACCION       = 0b10000;
     private static final int MASCARA_CODIGO_ACCION  = 0b11111;
 
-    // Mascaras para operar filas y columnas del tablero
+    // Masks for operating on board rows and columns
     private static final int  BITS_POR_FILA_TABLERO  = LADO * BITS_POR_CASILLA; // 16
     private static final long MASCARA_FILA_TABLERO   = 0xFFFFL;
     // Selecciona el nibble de columna 0 en cada una de las 4 filas
     private static final long MASCARA_COLUMNA_TABLERO = 0x000F000F000F000FL;
 
     /**
-     * Tabla de 32 codigos de accion. Las primeras 16 entradas tienen signo '+',
-     * las 16 siguientes signo '-'. Ya esta inicializada; no modificar.
+     * Table of 32 action codes. The first 16 entries have a '+' sign,
+     * the next 16 have a '-' sign. It is already initialized; do not modify.
      *
-     * Formato de cada codigo (5 bits):
-     *   bit  4  = signo (1 = '+')
-     *   bits 3-2 = columna (0..3)
-     *   bits 1-0 = fila    (0..3)
+     * Format of each code (5 bits):
+     *   bit  4  = sign (1 = '+')
+     *   bits 3-2 = column (0..3)
+     *   bits 1-0 = row    (0..3)
      */
     public static final int[] ACCIONES = new int[NUM_ACCIONES];
 
@@ -64,89 +63,89 @@ public final class Estado {
     private final long bitboard;
 
     // -------------------------------------------------------------------------
-    // Constructores — TODO Tarea 1
+    // Constructors — TODO Task 1
     // -------------------------------------------------------------------------
 
-    /** Construye el estado directamente desde el bitboard (ya validado). */
+    /** Construct the state directly from the (already validated) bitboard. */
     public Estado(long bitboard) {
-        // TODO: almacenar bitboard
+        // TODO: store bitboard
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(long)");
     }
 
     /**
-     * Construye el estado desde una cadena de 32 digitos decimales donde cada
-     * par representa la ficha de una casilla (casilla 0 = par 0..1, etc.).
-     * Ejemplo: "00010203040506070809101112131415" es el estado resuelto.
+     * Constructs the state from a string of 32 decimal digits where each
+     * pair represents the tile for a specific position (position 0 = pair 0–1, etc.).
+     * Example: "00010203040506070809101112131415" is the solved state.
      */
     public Estado(String representacion) {
-        // TODO: validar longitud, parsear 16 pares de digitos, llamar a construirBitboard
+        // TODO: validate length, parse 16 pairs of digits, call buildBitboard
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(String)");
     }
 
     /**
-     * Construye el estado desde un array de 16 fichas donde fichas[i] es la
-     * ficha en la casilla i.
+     * Constructs the state from an array of 16 tiles, where `tiles[i]` is the
+     * tile at position `i`.
      */
     public Estado(int[] fichas) {
-        // TODO: validar longitud, llamar a construirBitboard
+        // TODO: validate length, call buildBitboard
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(int[])");
     }
 
     // -------------------------------------------------------------------------
-    // Consultas — TODO Tarea 1
+    // Inquiries — TODO Task 1
     // -------------------------------------------------------------------------
 
-    /** Devuelve el bitboard interno (necesario para la tabla de visitados). */
+    /** Returns the internal bitboard (required for the visited table). */
     public long bitboard() {
         // TODO: return bitboard
         throw new UnsupportedOperationException("TODO: Tarea 1 - bitboard()");
     }
 
     /**
-     * Devuelve la ficha (0..15) que se encuentra en la casilla i.
-     * Casilla i = fila i/4, columna i%4.
-     * Operacion: (bitboard >>> (i * BITS_POR_CASILLA)) & MASCARA_FICHA
+     * Returns the tile (0..15) located at position i.
+     * Position i = row i/4, column i%4.
+     * Operation: (bitboard >>> (i * BITS_POR_CASILLA)) & MASCARA_FICHA
      */
     public int ficha(int casilla) {
         // TODO
         throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int)");
     }
 
-    /** Devuelve la ficha en la posicion (fila, columna). */
+    /** Returns the tile at the position (row, column). */
     public int ficha(int fila, int columna) {
-        // TODO: delegar a ficha(fila * LADO + columna)
+        // TODO: delegate to tile(row * SIDE + column)
         throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int,int)");
     }
 
-    /** Devuelve true si el bitboard es igual al estado resuelto. */
+    /** Returns true if the bitboard is equal to the solved state.*/
     public boolean esResuelto() {
         // TODO
         throw new UnsupportedOperationException("TODO: Tarea 1 - esResuelto()");
     }
 
     // -------------------------------------------------------------------------
-    // Sucesores — TODO Tarea 1
+    // Successors — TODO Task 1
     // -------------------------------------------------------------------------
 
     /**
-     * Devuelve la lista de 32 sucesores: uno por cada accion en ACCIONES[].
-     * Cada sucesor tiene: la accion aplicada, el estado resultante y costo 1.0f.
+     * Returns the list of 32 successors: one for each action in ACCIONES[].
+     * Each successor contains: the applied action, the resulting state, and a cost of 1.0f.
      */
     public List<Sucesor> sucesores() {
-        // TODO: iterar ACCIONES[], crear new Sucesor(accion, aplicar(accion), 1.0f)
+        // TODO: iterate over ACTIONS[], create new Successor(action, apply(action), 1.0f)
         throw new UnsupportedOperationException("TODO: Tarea 1 - sucesores()");
     }
 
     // -------------------------------------------------------------------------
-    // Aplicar acciones — TODO Tarea 1
+    // Apply actions — TODO Task 1
     // -------------------------------------------------------------------------
 
     /**
-     * Aplica la accion y devuelve el nuevo estado sin modificar este.
-     * 1. Extraer fila y columna del codigo (bits 0-1 y 2-3).
-     * 2. Extraer signo del bit 4.
-     * 3. desplazarFila(bitboard, fila, positivo)
-     * 4. desplazarColumna(resultado_anterior, columna, positivo)
+     * Applies the action and returns the new state without modifying the current one.
+     * 1. Extract row and column from the code (bits 0-1 and 2-3).
+     * 2. Extract the sign from bit 4.
+     * 3. shiftRow(bitboard, row, positive)
+     * 4. shiftColumn(previous_result, column, positive)
      */
     public Estado aplicar(int accion) {
         // TODO
@@ -154,12 +153,12 @@ public final class Estado {
     }
 
     // -------------------------------------------------------------------------
-    // Utilidades de acciones — TODO Tarea 1
+    // Action Utilities — TODO Task 1
     // -------------------------------------------------------------------------
 
     /**
-     * Convierte el codigo de accion en texto legible, por ejemplo "01+" o "33-".
-     * Formato: digito_fila + digito_columna + signo.
+     * Converts the action code into readable text, for example "01+" or "33-".
+     * Format: row_digit + column_digit + sign.
      */
     public static String accionComoTexto(int accion) {
         // TODO
@@ -167,9 +166,9 @@ public final class Estado {
     }
 
     /**
-     * Parsea una accion en formato texto ("01+", "33-", etc.) y devuelve su codigo.
-     * Validar: longitud = 3, primer caracter = digito fila 0-3,
-     *          segundo = digito columna 0-3, tercero = '+' o '-'.
+     * Parses an action in text format ("01+", "33-", etc.) and returns its code.
+     * Validation: length = 3, first character = row digit (0-3),
+     *             second = column digit (0-3), third = '+' or '-'.
      */
     public static int accionDesde(String representacion) {
         // TODO
@@ -177,12 +176,12 @@ public final class Estado {
     }
 
     // -------------------------------------------------------------------------
-    // equals, hashCode, toString — TODO Tarea 1
+    // equals, hashCode, toString — TODO Task 1
     // -------------------------------------------------------------------------
 
     @Override
     public boolean equals(Object obj) {
-        // TODO: comparar bitboard con instanceof Estado
+        // TODO: compare bitboard with instanceof State
         throw new UnsupportedOperationException("TODO: Tarea 1 - equals(Object)");
     }
 
@@ -193,9 +192,9 @@ public final class Estado {
     }
 
     /**
-     * Representacion de 32 digitos: cada casilla como dos digitos decimales,
-     * empezando por la casilla 0.
-     * Ejemplo del estado resuelto: "00010203040506070809101112131415"
+     * 32-digit representation: each cell as two decimal digits,
+     * starting with cell 0.
+     * Example of the solved state: "00010203040506070809101112131415"
      */
     @Override
     public String toString() {
@@ -204,13 +203,13 @@ public final class Estado {
     }
 
     // =========================================================================
-    // Metodos privados de ayuda — TODO Tarea 1
+    // Private aid methods — TODO Task 1
     // =========================================================================
 
     /**
-     * Construye el bitboard a partir del array de fichas.
-     * Para cada casilla i: resultado |= ((long) fichas[i]) << (i * BITS_POR_CASILLA)
-     * Validar: sin duplicados, cada ficha en [0, NUM_CASILLAS).
+     * Constructs the bitboard from the array of tiles.
+     * For each square i: result |= ((long) tiles[i]) << (i * BITS_PER_SQUARE)
+     * Validate: no duplicates, each tile in [0, NUM_SQUARES).
      */
     private static long construirBitboard(int[] fichas) {
         // TODO
@@ -218,19 +217,19 @@ public final class Estado {
     }
 
     /**
-     * Desplaza la fila indicada del bitboard una posicion a la derecha (positivo=true)
-     * o a la izquierda (positivo=false), con retorno circular.
+     * Shifts the specified row of the bitboard one position to the right (positive=true)
+     * or to the left (positive=false), with wrap-around.
      *
-     * La fila ocupa 16 bits a partir del bit (fila * 16).
-     * Mascara de la fila:    MASCARA_FILA_TABLERO << (fila * 16)
-     * Mascara del nibble de retorno: MASCARA_FICHA << (fila * 16)
+     * The row occupies 16 bits starting at bit (row * 16).
+     * Row mask:    MASCARA_FILA_TABLERO << (row * 16)
+     * Wrap-around nibble mask: MASCARA_FICHA << (row * 16)
      *
-     * Desplazamiento derecha (positivo):
-     *   rotada = ((extraida << 4) & mascaraFila) | ((extraida >>> 12) & mascaraRetorno)
+     * Right shift (positive):
+     *   rotated = ((extracted << 4) & rowMask) | ((extracted >>> 12) & wrapMask)
      *
-     * Desplazamiento izquierda (negativo):
-     *   mascaraTope = mascaraRetorno << 12
-     *   rotada = ((extraida >>> 4) & mascaraFila) | ((extraida << 12) & mascaraTope)
+     * Left shift (negative):
+     *   limitMask = wrapMask << 12
+     *   rotated = ((extracted >>> 4) & rowMask) | ((extracted << 12) & limitMask)
      */
     private static long desplazarFila(long bitboard, int fila, boolean positivo) {
         // TODO
@@ -238,19 +237,19 @@ public final class Estado {
     }
 
     /**
-     * Desplaza la columna indicada del bitboard una posicion hacia abajo (positivo=true)
-     * o hacia arriba (positivo=false), con retorno circular.
+     * Shifts the specified column of the bitboard one position down (positive=true)
+     * or up (positive=false), with wrap-around.
      *
-     * La columna ocupa 4 nibbles separados 16 bits entre si.
-     * Mascara de la columna: MASCARA_COLUMNA_TABLERO << (columna * BITS_POR_CASILLA)
-     * Mascara del nibble de retorno: MASCARA_FICHA << (columna * BITS_POR_CASILLA)
+     * The column occupies 4 nibbles spaced 16 bits apart.
+     * Column mask: MASCARA_COLUMNA_TABLERO << (column * BITS_POR_CASILLA)
+     * Wrap-around nibble mask: MASCARA_FICHA << (column * BITS_POR_CASILLA)
      *
-     * Desplazamiento abajo (positivo):
-     *   rotada = ((extraida << 16) & mascaraColumna) | ((extraida >>> 48) & mascaraRetorno)
+     * Shift down (positive):
+     *   rotated = ((extracted << 16) & columnMask) | ((extracted >>> 48) & wrapMask)
      *
-     * Desplazamiento arriba (negativo):
-     *   mascaraSuperior = 0xF000000000000000L >>> (12 - columna * 4)
-     *   rotada = ((extraida >>> 16) & mascaraColumna) | ((extraida << 48) & mascaraSuperior)
+     * Shift up (negative):
+     *   upperMask = 0xF000000000000000L >>> (12 - column * 4)
+     *   rotated = ((extracted >>> 16) & columnMask) | ((extracted << 48) & upperMask)
      */
     private static long desplazarColumna(long bitboard, int columna, boolean positivo) {
         // TODO
