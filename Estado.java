@@ -69,6 +69,7 @@ public final class Estado {
     /** Construct the state directly from the (already validated) bitboard. */
     public Estado(long bitboard) {
         // TODO: store bitboard
+
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(long)");
     }
 
@@ -79,6 +80,13 @@ public final class Estado {
      */
     public Estado(String representacion) {
         // TODO: validate length, parse 16 pairs of digits, call buildBitboard
+        int lengthOfString = length(representacion);
+
+        if(lengthOfString == 16)
+        {
+            construirBitboard(lengthOfString);
+        }
+
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(String)");
     }
 
@@ -88,6 +96,12 @@ public final class Estado {
      */
     public Estado(int[] fichas) {
         // TODO: validate length, call buildBitboard
+        int lengthOfArray = length(fichas); 
+
+        if(lengthOfArray == 16)
+        {
+            construirBitboard(fichas);
+        }
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(int[])");
     }
 
@@ -98,7 +112,8 @@ public final class Estado {
     /** Returns the internal bitboard (required for the visited table). */
     public long bitboard() {
         // TODO: return bitboard
-        throw new UnsupportedOperationException("TODO: Tarea 1 - bitboard()");
+        return bitboard;
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - bitboard()");
     }
 
     /**
@@ -108,13 +123,19 @@ public final class Estado {
      */
     public int ficha(int casilla) {
         // TODO
+
         throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int)");
     }
 
     /** Returns the tile at the position (row, column). */
     public int ficha(int fila, int columna) {
         // TODO: delegate to tile(row * SIDE + column)
-        throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int,int)");
+
+        int boxValue = 0;
+
+        return boxValue;
+
+        //throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int,int)");
     }
 
     /** Returns true if the bitboard is equal to the solved state.*/
