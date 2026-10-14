@@ -69,7 +69,7 @@ public final class Estado {
     /** Construct the state directly from the (already validated) bitboard. */
     public Estado(long bitboard) {
         // TODO: store bitboard
-
+        
         throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(long)");
     }
 
@@ -113,6 +113,7 @@ public final class Estado {
     public long bitboard() {
         // TODO: return bitboard
         return bitboard;
+
         // throw new UnsupportedOperationException("TODO: Tarea 1 - bitboard()");
     }
 
@@ -131,7 +132,10 @@ public final class Estado {
     public int ficha(int fila, int columna) {
         // TODO: delegate to tile(row * SIDE + column)
 
-        int boxValue = 0;
+
+        int position = (fila*4) + columna;
+        int boxValue = bitboard[position];
+
 
         return boxValue;
 
