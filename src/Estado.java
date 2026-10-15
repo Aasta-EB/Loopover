@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,8 +70,8 @@ public final class Estado {
     /** Construct the state directly from the (already validated) bitboard. */
     public Estado(long bitboard) {
         // TODO: store bitboard
-        
-        throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(long)");
+        this.bitboard = bitboard; 
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(long)");
     }
 
     /**
@@ -80,15 +81,24 @@ public final class Estado {
      */
     public Estado(String representacion) {
         // TODO: validate length, parse 16 pairs of digits, call buildBitboard
-        int lengthOfString = length(representacion);
-
-        if(lengthOfString == 16)
+        if(representacion.length() == 32)
         {
-            construirBitboard(lengthOfString);
+            int[] tiles = new int[16]; 
+            for(int i = 0; i<16; i++)
+            {
+
+                tiles[i] = representacion.charAt(i)+representacion.charAt(i+1); //representacion.parseInt((i*2)-1, i*2);
+            }
+            
+            construirBitboard(tiles);
+        }
+        else{
+            throw new IllegalArgumentException("The bitboard is not the correct length");
         }
 
-        throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(String)");
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(String)");
     }
+
 
     /**
      * Constructs the state from an array of 16 tiles, where `tiles[i]` is the
@@ -96,13 +106,18 @@ public final class Estado {
      */
     public Estado(int[] fichas) {
         // TODO: validate length, call buildBitboard
-        int lengthOfArray = length(fichas); 
-
-        if(lengthOfArray == 16)
+    
+        if(fichas.length == 16)
         {
             construirBitboard(fichas);
         }
-        throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(int[])");
+        else
+        {
+        throw new IllegalArgumentException("The bitboard is not the correct length");
+        }
+        
+        
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(int[])");
     }
 
     // -------------------------------------------------------------------------
@@ -112,6 +127,7 @@ public final class Estado {
     /** Returns the internal bitboard (required for the visited table). */
     public long bitboard() {
         // TODO: return bitboard
+
         return bitboard;
 
         // throw new UnsupportedOperationException("TODO: Tarea 1 - bitboard()");
@@ -125,19 +141,22 @@ public final class Estado {
     public int ficha(int casilla) {
         // TODO
 
-        throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int)");
+        //posicion i = casilla/4, casilla%4;
+
+        int position = (int)((bitboard >>> (casilla*BITS_POR_CASILLA)) & MASCARA_FICHA);
+
+        return position;
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int)");
     }
 
     /** Returns the tile at the position (row, column). */
     public int ficha(int fila, int columna) {
         // TODO: delegate to tile(row * SIDE + column)
 
+        int position = (fila*LADO) + columna;
 
-        int position = (fila*4) + columna;
-        int boxValue = bitboard[position];
-
-
-        return boxValue;
+        return ficha(position);
 
         //throw new UnsupportedOperationException("TODO: Tarea 1 - ficha(int,int)");
     }
@@ -145,7 +164,15 @@ public final class Estado {
     /** Returns true if the bitboard is equal to the solved state.*/
     public boolean esResuelto() {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 1 - esResuelto()");
+        if(bitboard == BITBOARD_RESUELTO)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - esResuelto()");
     }
 
     // -------------------------------------------------------------------------
@@ -158,7 +185,15 @@ public final class Estado {
      */
     public List<Sucesor> sucesores() {
         // TODO: iterate over ACTIONS[], create new Successor(action, apply(action), 1.0f)
-        throw new UnsupportedOperationException("TODO: Tarea 1 - sucesores()");
+
+        List<Sucesor> successors = new ArrayList<>();
+        for(int action : ACCIONES)
+        {
+            successors.add(ACCIONES[action], );
+        }
+
+        return successors;
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - sucesores()");
     }
 
     // -------------------------------------------------------------------------
@@ -174,6 +209,9 @@ public final class Estado {
      */
     public Estado aplicar(int accion) {
         // TODO
+
+
+
         throw new UnsupportedOperationException("TODO: Tarea 1 - aplicar(int)");
     }
 
