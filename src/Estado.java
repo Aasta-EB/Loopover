@@ -87,10 +87,10 @@ public final class Estado {
             for(int i = 0; i<16; i++)
             {
 
-                tiles[i] = representacion.charAt(i)+representacion.charAt(i+1); //representacion.parseInt((i*2)-1, i*2);
+                tiles[i] = Integer.parseInt(representacion.substring(i*2, (i*2)+2));
             }
             
-            construirBitboard(tiles);
+            this.bitboard = construirBitboard(tiles);
         }
         else{
             throw new IllegalArgumentException("The bitboard is not the correct length");
@@ -102,19 +102,19 @@ public final class Estado {
 
     /**
      * Constructs the state from an array of 16 tiles, where `tiles[i]` is the
-     * tile at position `i`.
+* tile at position `i`.
      */
     public Estado(int[] fichas) {
         // TODO: validate length, call buildBitboard
     
         if(fichas.length == 16)
         {
-            construirBitboard(fichas);
+            this.bitboard = construirBitboard(fichas);
         }
         else
         {
         throw new IllegalArgumentException("The bitboard is not the correct length");
-        }
+    }
         
         
         // throw new UnsupportedOperationException("TODO: Tarea 1 - Constructor Estado(int[])");
@@ -186,13 +186,15 @@ public final class Estado {
     public List<Sucesor> sucesores() {
         // TODO: iterate over ACTIONS[], create new Successor(action, apply(action), 1.0f)
 
+        
         List<Sucesor> successors = new ArrayList<>();
         for(int action : ACCIONES)
         {
-            successors.add(ACCIONES[action], );
+            Sucesor inSuccesors = new Sucesor(action, aplicar(action), 1.0f);
+            successors.add(inSuccesors);
         }
 
-        return successors;
+        return successors; 
         // throw new UnsupportedOperationException("TODO: Tarea 1 - sucesores()");
     }
 
@@ -210,9 +212,19 @@ public final class Estado {
     public Estado aplicar(int accion) {
         // TODO
 
+        int plusMinus = accion & BIT_SIGNO_ACCION;
+
+        int rowExtract = (int)(accion  & MASCARA_FILA_ACCION);
+        int columnExtract = (int)(accion & MASCARA_COLUMNA_ACCION) >>> 2;
+
+       
+        long newBitboard = desplazarFila(bitboard, rowExtract, plusMinus != 0);
+        long newBitboard2 = desplazarColumna(newBitboard, columnExtract, plusMinus != 0);
+
+        return new Estado(newBitboard2);
 
 
-        throw new UnsupportedOperationException("TODO: Tarea 1 - aplicar(int)");
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - aplicar(int)");
     }
 
     // -------------------------------------------------------------------------
@@ -225,7 +237,24 @@ public final class Estado {
      */
     public static String accionComoTexto(int accion) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 1 - accionComoTexto(int)");
+        int rowExtract = (int)(accion & MASCARA_FILA_ACCION);
+        int columnExtract = (int)((accion & MASCARA_COLUMNA_ACCION) >>> 2);
+
+        boolean bitIsPositive = (accion & BIT_SIGNO_ACCION) != 0;
+
+        String actionAsText = "";
+        if(bitIsPositive)
+        {
+            actionAsText = "" + rowExtract + columnExtract + '+';
+        }
+        else
+        { 
+            actionAsText = "" + rowExtract + columnExtract + '-';
+        }
+
+        return actionAsText;
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - accionComoTexto(int)");
     }
 
     /**
@@ -235,7 +264,41 @@ public final class Estado {
      */
     public static int accionDesde(String representacion) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 1 - accionDesde(String)");
+
+        if(representacion.length() == 3)
+        {
+            int rowNumber = representacion.charAt(0) - '0';
+            int columnNumber = (representacion.charAt(1) - '0');
+            int signNumber;
+            if(representacion.charAt(2)=='+')
+            {
+                signNumber = 1;
+            }
+            else if(representacion.charAt(2)=='-')
+            {
+                signNumber = 0;
+            }
+            else
+            {
+                throw new IllegalArgumentException("Problem in accion desde");
+            }
+
+            if((rowNumber <= 3 && rowNumber >= 0) && (columnNumber <= 3 && columnNumber >= 0))
+            {
+                return rowNumber | (columnNumber << 2)|(signNumber<<4);
+            }
+            else
+            {
+                throw new IllegalArgumentException("Problem in accion desde");
+            }
+
+        }
+        else
+        {
+            throw new IllegalArgumentException("Problem in accion desde");
+        }
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - accionDesde(String)");
     }
 
     // -------------------------------------------------------------------------
@@ -245,13 +308,35 @@ public final class Estado {
     @Override
     public boolean equals(Object obj) {
         // TODO: compare bitboard with instanceof State
-        throw new UnsupportedOperationException("TODO: Tarea 1 - equals(Object)");
+
+        if(obj instanceof Estado)
+        {
+            Estado state = (Estado) obj;
+            if(((Estado)obj).bitboard() == bitboard)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - equals(Object)");
     }
 
     @Override
     public int hashCode() {
         // TODO: Long.hashCode(bitboard)
-        throw new UnsupportedOperationException("TODO: Tarea 1 - hashCode()");
+
+        return Long.hashCode(bitboard);
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - hashCode()");
     }
 
     /**
@@ -261,8 +346,23 @@ public final class Estado {
      */
     @Override
     public String toString() {
-        // TODO: StringBuilder, para cada casilla i → ficha(i) con cero inicial si < 10
-        throw new UnsupportedOperationException("TODO: Tarea 1 - toString()");
+        // TODO: StringBuilder; for each cell i, represent the piece at i, adding a leading zero if the value is < 10.
+
+        StringBuilder buildString = new StringBuilder();
+        
+        for(int i = 0; i < NUM_CASILLAS; i++)
+        {
+            if(ficha(i) < 10)
+            {
+                buildString.append('0');
+            }
+            buildString.append(ficha(i));
+            // buildString = ficha(i);
+        }
+
+        String builtString = buildString.toString();
+        return builtString;
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - toString()");
     }
 
     // =========================================================================
@@ -276,7 +376,30 @@ public final class Estado {
      */
     private static long construirBitboard(int[] fichas) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 1 - construirBitboard(int[])");
+
+        boolean[] seen = new boolean[NUM_CASILLAS];
+        long result = 0; 
+        for(int i = 0; i < NUM_CASILLAS; i++)
+        {
+            if(fichas[i] < 0 || fichas[i] > 16)
+            {
+                throw new IllegalArgumentException("Problem in construir Bitboard");
+            }
+
+            if(seen[fichas[i]])
+            {
+                throw new IllegalArgumentException("Problem in construir Bitboard");
+            }
+            else
+            {
+                seen[fichas[i]] = true;
+            }
+            result |= ((long) fichas[i]) << (i * BITS_POR_CASILLA); 
+        }
+
+        return result;
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - construirBitboard(int[])");
     }
 
     /**
@@ -296,7 +419,29 @@ public final class Estado {
      */
     private static long desplazarFila(long bitboard, int fila, boolean positivo) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 1 - desplazarFila");
+
+        long rowMask = MASCARA_FILA_TABLERO << (fila * 16);
+        long wrapMask = MASCARA_FICHA << (fila * 16);
+        long extracted = bitboard & rowMask;
+
+
+        long rotated;
+        if(positivo)
+        {
+            rotated = ((extracted << 4) & rowMask)|((extracted >>> 12) & wrapMask);
+        }
+        else
+        {
+            long limitMask = wrapMask << 12;
+            rotated = ((extracted >>> 4) & rowMask)|((extracted << 12) & limitMask);
+        }
+
+        long fullBitboard = (bitboard & ~rowMask) | rotated;
+
+        return fullBitboard;
+        
+
+        // throw new UnsupportedOperationException("TODO: Tarea 1 - desplazarFila");
     }
 
     /**
@@ -316,7 +461,27 @@ public final class Estado {
      */
     private static long desplazarColumna(long bitboard, int columna, boolean positivo) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 1 - desplazarColumna");
+
+        long columnMask = MASCARA_COLUMNA_TABLERO << (columna * BITS_POR_CASILLA);
+        long wrapMask = MASCARA_FICHA << (columna * BITS_POR_CASILLA);
+        long extracted = bitboard & columnMask;
+
+        long rotated;
+        if(positivo)
+        {
+            rotated = (((extracted << 16) & columnMask) | ((extracted >>> 48) & wrapMask));
+        }
+        else
+        {
+            long upperMask = 0xF000000000000000L >>> (12 - columna * 4);
+            rotated = ((extracted >>> 16) & columnMask) | ((extracted << 48) & upperMask);
+        }
+
+        long fullBitboard = (bitboard & ~columnMask) | rotated;
+
+        return fullBitboard;
+
+        //  throw new UnsupportedOperationException("TODO: Tarea 1 - desplazarColumna");
     }
 
     private static void comprobarCasilla(int casilla) {
