@@ -1,6 +1,6 @@
 import java.util.function.ToIntFunction;
 
-/** Motor de busqueda. TODO: implementar en Tarea 2. */
+/** Search engine. TODO: implement in Task 2. */
 public final class Busqueda {
 
     public enum Estrategia {
@@ -32,9 +32,23 @@ public final class Busqueda {
         throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
-    public Nodo buscar() { throw new UnsupportedOperationException("TODO: Tarea 2"); }
-    public int nodosExpandidos() { throw new UnsupportedOperationException("TODO: Tarea 2"); }
-    public int estadosVisitados() { throw new UnsupportedOperationException("TODO: Tarea 2"); }
-    public long tiempoMs() { throw new UnsupportedOperationException("TODO: Tarea 2"); }
-    public boolean limiteVisitadosAlcanzado() { throw new UnsupportedOperationException("TODO: Tarea 2"); }
+    public Nodo buscar() { 
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
+
+    public int nodosExpandidos() { 
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
+
+    public int estadosVisitados() { 
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
+
+    public long tiempoMs() { 
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
+
+    public boolean limiteVisitadosAlcanzado() { 
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
 }

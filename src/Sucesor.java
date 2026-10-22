@@ -1,6 +1,6 @@
 /**
- * Tupla inmutable que representa un nodo sucesor en el espacio de estados:
- * la accion que se aplico, el estado resultante y el costo de esa transicion.
+ * An immutable tuple representing a successor node in the state space:
+ * the action applied, the resulting state, and the cost of that transition.
  */
 public final class Sucesor {
 
