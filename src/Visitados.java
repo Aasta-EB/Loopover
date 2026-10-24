@@ -1,3 +1,4 @@
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 
 /**
  * A table of visited states that stores the best value (lowest cost) obtained
@@ -12,11 +13,13 @@
 public final class Visitados {
 
     // TODO: declare the map field
-    // private final Long2IntOpenHashMap mapa;
+    private final Long2IntOpenHashMap mapa;
 
     public Visitados() {
         // TODO: this.mapa = new Long2IntOpenHashMap()
-        throw new UnsupportedOperationException("TODO: Tarea 2 - Visitados()");
+        this.mapa = new Long2IntOpenHashMap(); 
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - Visitados()");
     }
 
     /**
@@ -31,11 +34,22 @@ public final class Visitados {
      */
     public boolean registrarSiMejor(long estado, int valor) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        int previous = mapa.getOrDefault(estado, Integer.MAX_VALUE);
+        if(Math.abs(valor) < previous)
+        {
+            mapa.put(estado, Math.abs(valor));
+            return true; 
+        }
+        else
+        {
+            return false; 
+        } 
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public int tamano() {
         // TODO: mapa.size()
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        return mapa.size(); 
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 }

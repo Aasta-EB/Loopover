@@ -40,7 +40,8 @@ public final class Busqueda {
     private long tiempoMs;
     private boolean limiteVisitadosAlcanzado;
 
-    public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima) {
+    public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima) 
+    {
         this(estadoInicial, estrategia, profundidadMaxima, MAX_NODOS_POR_DEFECTO,
                 Heuristicas::heuristicaManhattanToroidal, 0L);
     }

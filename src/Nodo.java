@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 import it.unimi.dsi.fastutil.objects.ObjectList;
 
 /**
@@ -51,7 +53,18 @@ public final class Nodo implements Comparable<Nodo> {
     public Nodo(Estado estado) {
         if (estado == null) throw new IllegalArgumentException("El estado no puede ser nulo");
         // TODO: initialize all fields
-        throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Estado)");
+
+        bitboard = estado.bitboard(); 
+        padre = null; 
+        indiceAccion = -1;
+        id = siguienteId++;
+        profundidad = 0;
+        costoAcumulado = 0; 
+        hijosPendientes = ; // Dont understand what value to put here
+        hijosVivos = 0; 
+        expandido = false; 
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Estado)");
     }
 
     /**
@@ -60,7 +73,9 @@ public final class Nodo implements Comparable<Nodo> {
      */
     public Nodo(Nodo padre, int indiceAccion) {
         // TODO: this(padre, indiceAccion, 1)
-        throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int)");
+        this(padre, indiceAccion, 1);
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int)");
     }
 
     /**
@@ -74,38 +89,71 @@ public final class Nodo implements Comparable<Nodo> {
     public Nodo(Nodo padre, int indiceAccion, int costoAccion) {
         if (padre == null) throw new IllegalArgumentException("El padre no puede ser nulo");
         // TODO: initialize all fields
-        throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int,int)");
+        this.padre = padre; 
+        this.indiceAccion = indiceAccion; 
+        id = siguienteId++;
+        
+        estado = padre.estado().aplicar(Estado.ACCIONES[indiceAccion]);
+        profundidad = padre.profundidad + 1;
+        costoAcumulado = padre.costoAcumulado + costoAccion;
+        hijosPendientes = ; 
+        hijosVivos = 0; 
+        expandido = false; 
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int,int)");
     }
 
     public Estado estado() {
         // TODO: return estado
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        return estado(); 
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public Nodo padre() {
         // TODO: return padre
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        
+        return padre; 
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /** Index 0..31 of the action applied to the parent in State.ACCIONES. */
     public int accion() {
         // TODO: return indiceAccion
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+
+        return indiceAccion; 
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public int profundidad() {
         // TODO: return profundidad
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+
+        return profundidad; 
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public int costoAcumulado() {
         // TODO: return costoAcumulado
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+
+        return costoAcumulado; 
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
-    public void fijarHeuristica(int heuristica) { throw new UnsupportedOperationException("TODO: Tarea 2"); }
-    public int valor() { throw new UnsupportedOperationException("TODO: Tarea 2"); }
-    public void fijarValor(int valor) { throw new UnsupportedOperationException("TODO: Tarea 2"); }
+    public void fijarHeuristica(int heuristica) 
+    { 
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
+    public int valor() 
+    { 
+        return valor; 
+        // throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
+    public void fijarValor(int valor) 
+    {
+        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+    }
 
     // Gestion de hijos para SMA* — TODO: Tarea 3
     public void marcarHijoGenerado(int indiceAccion) { throw new UnsupportedOperationException("TODO: Tarea 3"); }
@@ -120,7 +168,8 @@ public final class Nodo implements Comparable<Nodo> {
 
     public boolean esRaiz() {
         // TODO: return padre == null
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        return padre == null; 
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -131,7 +180,16 @@ public final class Nodo implements Comparable<Nodo> {
     @Override
     public int compareTo(Nodo otro) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        if(Integer.compare(this.valor, otro.valor) == 0)
+        {
+            return Long.compare(id, otro.id);
+        }
+        else
+        {
+            throw new IllegalArgumentException("Something is wrong in compare to nodo.java"); 
+        }
+        
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -140,12 +198,28 @@ public final class Nodo implements Comparable<Nodo> {
      */
     public ObjectList<Nodo> camino() {
         //TODO: collect into a list, Collections.reverse
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+
+        ObjectList<Nodo> collections;
+        
+        for()
+        {
+            collections.add(this.padre);
+        }
+
+        return collections;
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public String caminoComoTexto() {
         // TODO: construct text based on camino()
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        String caminoAsText; 
+        for(Nodo cam : camino())
+        {
+            cam.StringBuilder >> caminoAsText; 
+        }
+        return caminoAsText;
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -154,7 +228,26 @@ public final class Nodo implements Comparable<Nodo> {
      */
     @Override
     public boolean equals(Object obj) {
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        
+        if(obj instanceof Nodo)
+        {
+            Nodo node = (Nodo) obj; 
+            if(this.valor == node.valor && this.id == node.id)
+            {
+                return true; 
+            }
+            else 
+            { 
+                return false; 
+            }
+        }
+        else 
+        { 
+            return false; 
+        }
+        
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /** Consistent with equals(). */
@@ -195,6 +288,10 @@ public final class Nodo implements Comparable<Nodo> {
      */
     private static void validarIndice(int indiceAccion) {
         // TODO
-        throw new UnsupportedOperationException("TODO: Tarea 2 - validarIndice");
+        if(!(indiceAccion >= 0 && indiceAccion <= Estado.NUM_ACCIONES -1))
+        {
+            throw new IllegalArgumentException("1, action index not in range");
+        }
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - validarIndice");
     }
 }
