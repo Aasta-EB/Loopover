@@ -1,3 +1,5 @@
+import java.util.PriorityQueue;
+
 import com.google.common.collect.MinMaxPriorityQueue;
 
 /**
@@ -32,14 +34,14 @@ public final class Frontera {
         this.maxNodos = maxNodos;
         // TODO: initialize heap
         heap = MinMaxPriorityQueue.expectedSize(Math.min(maxNodos, 6536)).create();
-        throw new UnsupportedOperationException("TODO: Tarea 2 - Frontera(int)");
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - Frontera(int)");
     }
 
     /** Number of nodes currently in the frontier. */
     public int tamano() {
         // TODO: return monticulo.size()
         
-        return monticulo.size();
+        return heap.size();
 
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
@@ -47,24 +49,43 @@ public final class Frontera {
     public boolean vacia() {
         // TODO: return monticulo.isEmpty()
 
-        return monticulo.isEmpty();
+        return heap.isEmpty();
 
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
+    // Dont know if this solution is correct
     public boolean contiene(Nodo nodo) {
-        //Comparison is based on identity (n == node) while traversing the queue: we need
+        // Comparison is based on identity (n == node) while traversing the queue: we need
         // to know whether that specific reference is present, not whether there is
         // another node with the same state.
         // TODO: return ...
 
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        if(vacia())
+        {
+            return false; 
+        }
+        else
+        {
+            MinMaxPriorityQueue<Nodo> rollThrough = heap;
+            for(int i = 0; i<tamano(); i++)
+            {
+                if(rollThrough.peekFirst() == nodo)
+                {
+                    return true;
+                } 
+            }
+            return false; 
+        }
+        
+
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public void insertar(Nodo nodo) {
         // TODO: monticulo.add(nodo)
 
-        monticulo.add(nodo);
+        heap.add(nodo);
         
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }

@@ -78,7 +78,48 @@ public final class Busqueda {
      */
     public Nodo buscar() {
         // TODO: implement the search loop
-        throw new UnsupportedOperationException("TODO: Tarea 2 - buscar()");
+
+        while(!frontier.isEmpty())
+        {
+            Nodo newNode = new Nodo(estadoInicial);
+            frontier.extraerMejor(newNode);
+            if(!registrarSiMejor(bitboard, valor))
+            {
+                // discard
+            }
+            else
+            {
+                // keep
+            }
+
+            if(esResuelto(newNode))
+            {
+                return newNode; 
+            }
+            else
+            {
+                return null; 
+            }
+
+        }
+        
+        // throw new UnsupportedOperationException("TODO: Tarea 2 - buscar()");
+    }
+
+    // Added these functions to help with the search, dont know how helpful they will actually be
+    public Nodo depthFirst()
+    {
+
+    }
+
+    public Nodo breadthFirst()
+    {
+
+    }
+
+    public Nodo uniformCost()
+    {
+
     }
 
     public int nodosExpandidos() { return nodosExpandidos; }

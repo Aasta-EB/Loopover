@@ -93,7 +93,7 @@ public final class Nodo implements Comparable<Nodo> {
         this.indiceAccion = indiceAccion; 
         id = siguienteId++;
         
-        estado = padre.estado().aplicar(Estado.ACCIONES[indiceAccion]);
+        bitboard = padre.estado().aplicar(Estado.ACCIONES[indiceAccion]); // But isnt bitboard the state in this instace?????
         profundidad = padre.profundidad + 1;
         costoAcumulado = padre.costoAcumulado + costoAccion;
         hijosPendientes = ; 
