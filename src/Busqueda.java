@@ -78,18 +78,22 @@ public final class Busqueda {
      */
     public Nodo buscar() {
         // TODO: implement the search loop
+        Nodo newNode = new Nodo(estadoInicial);
+
+        Visitados visitedStates = new Visitados; 
+
+        frontier = newNode; 
 
         while(!frontier.isEmpty())
         {
-            Nodo newNode = new Nodo(estadoInicial);
-            frontier.extraerMejor(newNode);
-            if(!registrarSiMejor(bitboard, valor))
+            newNode = frontier.extraerMejor();
+            if(!registrarSiMejor(bestNode, valor))
             {
                 // discard
             }
             else
             {
-                // keep
+                visitedStates.add(newNode);
             }
 
             if(esResuelto(newNode))
@@ -98,7 +102,7 @@ public final class Busqueda {
             }
             else
             {
-                return null; 
+                newNode = newNode.Frontera.extraerMejor();
             }
 
         }
