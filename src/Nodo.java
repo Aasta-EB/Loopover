@@ -1,5 +1,8 @@
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 
 /**
@@ -54,15 +57,15 @@ public final class Nodo implements Comparable<Nodo> {
         if (estado == null) throw new IllegalArgumentException("El estado no puede ser nulo");
         // TODO: initialize all fields
 
-        bitboard = estado.bitboard(); 
-        padre = null; 
-        indiceAccion = -1;
-        id = siguienteId++;
-        profundidad = 0;
-        costoAcumulado = 0; 
-        hijosPendientes = ; // Dont understand what value to put here
-        hijosVivos = 0; 
-        expandido = false; 
+        this.bitboard = estado.bitboard(); 
+        this.padre = null; 
+        this.indiceAccion = SIN_ACCION;
+        this.id = siguienteId++;
+        this.profundidad = 0;
+        this.costoAcumulado = 0; 
+        this.hijosPendientes = -1; // Is this really correct?
+        this.hijosVivos = 0; 
+        this.expandido = false; 
 
         // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Estado)");
     }
@@ -88,31 +91,33 @@ public final class Nodo implements Comparable<Nodo> {
      */
     public Nodo(Nodo padre, int indiceAccion, int costoAccion) {
         if (padre == null) throw new IllegalArgumentException("El padre no puede ser nulo");
+        validarIndice(indiceAccion);
+
         // TODO: initialize all fields
         this.padre = padre; 
         this.indiceAccion = indiceAccion; 
-        id = siguienteId++;
+        this.id = siguienteId++;
         
-        bitboard = padre.estado().aplicar(Estado.ACCIONES[indiceAccion]); // But isnt bitboard the state in this instace?????
-        profundidad = padre.profundidad + 1;
-        costoAcumulado = padre.costoAcumulado + costoAccion;
-        hijosPendientes = ; 
-        hijosVivos = 0; 
-        expandido = false; 
+        this.bitboard = new Estado(padre.bitboard).aplicar(Estado.ACCIONES[indiceAccion]).bitboard(); 
+        this.profundidad = padre.profundidad + 1;
+        this.costoAcumulado = padre.costoAcumulado + costoAccion;
+        this.hijosPendientes = SIN_ACCION; 
+        this.hijosVivos = 0; 
+        this.expandido = false; 
 
         // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int,int)");
     }
 
     public Estado estado() {
         // TODO: return estado
-        return estado(); 
+        return estado(); // What am i supposed to do here
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public Nodo padre() {
         // TODO: return padre
         
-        return padre; 
+        return this.padre; 
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
@@ -120,7 +125,7 @@ public final class Nodo implements Comparable<Nodo> {
     public int accion() {
         // TODO: return indiceAccion
 
-        return indiceAccion; 
+        return this.indiceAccion; 
 
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
@@ -199,13 +204,16 @@ public final class Nodo implements Comparable<Nodo> {
     public ObjectList<Nodo> camino() {
         //TODO: collect into a list, Collections.reverse
 
-        ObjectList<Nodo> collections;
+        ObjectList<Nodo> collections = new ObjectArrayList<>();
         
-        for()
+        Nodo aux = this.padre;
+        while(!(aux.padre == null) || !(aux == null))
         {
-            collections.add(this.padre);
+            collections.add(aux.padre);
+            aux = aux.padre; 
         }
 
+        Collections.reverse(collections);
         return collections;
 
         // throw new UnsupportedOperationException("TODO: Tarea 2");
@@ -213,11 +221,14 @@ public final class Nodo implements Comparable<Nodo> {
 
     public String caminoComoTexto() {
         // TODO: construct text based on camino()
-        String caminoAsText; 
+        StringBuilder buildString = new StringBuilder();
         for(Nodo cam : camino())
         {
-            cam.StringBuilder >> caminoAsText; 
+            buildString.append(cam); 
         }
+
+        String caminoAsText = buildString.toString(); 
+
         return caminoAsText;
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
@@ -253,6 +264,10 @@ public final class Nodo implements Comparable<Nodo> {
     /** Consistent with equals(). */
     @Override
     public int hashCode() {
+        if(equals())
+        {
+
+        }
         throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
