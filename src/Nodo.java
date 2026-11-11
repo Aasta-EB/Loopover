@@ -108,9 +108,10 @@ public final class Nodo implements Comparable<Nodo> {
         // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int,int)");
     }
 
-    public Estado estado() {
+
+   public Estado estado() {
         // TODO: return estado
-        return estado(); // What am i supposed to do here
+        return new Estado(bitboard); 
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
@@ -148,7 +149,8 @@ public final class Nodo implements Comparable<Nodo> {
 
     public void fijarHeuristica(int heuristica) 
     { 
-        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+        this.heuristica = heuristica;
+        // throw new UnsupportedOperationException("TODO: Tarea 2"); 
     }
     public int valor() 
     { 
@@ -157,7 +159,8 @@ public final class Nodo implements Comparable<Nodo> {
     }
     public void fijarValor(int valor) 
     {
-        throw new UnsupportedOperationException("TODO: Tarea 2"); 
+        this.valor = valor; 
+        // throw new UnsupportedOperationException("TODO: Tarea 2"); 
     }
 
     // Gestion de hijos para SMA* — TODO: Tarea 3
@@ -264,11 +267,10 @@ public final class Nodo implements Comparable<Nodo> {
     /** Consistent with equals(). */
     @Override
     public int hashCode() {
-        if(equals())
-        {
-
-        }
-        throw new UnsupportedOperationException("TODO: Tarea 2");
+        
+        return Long.hashCode(id);
+        
+        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**

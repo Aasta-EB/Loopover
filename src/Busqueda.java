@@ -72,7 +72,7 @@ public final class Busqueda {
         this.heuristica       = heuristica;
         this.maxVisitados     = maxVisitados;
     }
-
+ // _____________________________________________________________________________________________________________________________________________________
     /**
      * Executes the search and returns the solution node, or null if none was found.
      */
@@ -105,40 +105,39 @@ public final class Busqueda {
         
         // throw new UnsupportedOperationException("TODO: Tarea 2 - buscar()");
     }
-
-    // Added these functions to help with the search, dont know how helpful they will actually be
-    public Nodo depthFirst()
-    {
-
-    }
-
-    public Nodo breadthFirst()
-    {
-
-    }
-
-    public Nodo uniformCost()
-    {
-
-    }
+ // _____________________________________________________________________________________________________________________________________________________
 
     public int nodosExpandidos() { return nodosExpandidos; }
     public int estadosVisitados() { return estadosVisitados; }
     public long tiempoMs() { return tiempoMs; }
     public boolean limiteVisitadosAlcanzado() { return limiteVisitadosAlcanzado; }
 
+    // __________________________________________________________________________________________________________________________________________________
     /**
      * Assigns the node's sorting value according to the strategy.
      */
     private void asignarValor(Nodo nodo) {
         switch (estrategia) {
-            case PROFUNDIDAD    -> throw new UnsupportedOperationException("TODO: Tarea 2 - PROFUNDIDAD");
-            case ANCHURA        -> throw new UnsupportedOperationException("TODO: Tarea 2 - ANCHURA");
-            case COSTO_UNIFORME -> throw new UnsupportedOperationException("TODO: Tarea 2 - COSTO_UNIFORME");
+            case PROFUNDIDAD:
+                nodo.fijarValor(nodo);
+
+                throw new UnsupportedOperationException("TODO: Tarea 2 - PROFUNDIDAD");
+                break;
+            
+            case ANCHURA:
+
+                throw new UnsupportedOperationException("TODO: Tarea 2 - ANCHURA");
+                break; 
+            case COSTO_UNIFORME:
+
+                throw new UnsupportedOperationException("TODO: Tarea 2 - COSTO_UNIFORME");
+                break;
+                
             case VORAZ, A_ESTRELLA, A_ESTRELLA_ACOTADA -> throw new UnsupportedOperationException("TODO: Tarea 3 - estrategia informada");
             default -> {}
         }
     }
+    // ____________________________________________________________________________________________________________________________________________________
 
     /**
      *For SMA*: frees memory by evicting a discardable page and returns true
