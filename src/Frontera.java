@@ -54,31 +54,28 @@ public final class Frontera {
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
-    // Dont know if this solution is correct
     public boolean contiene(Nodo nodo) {
         // Comparison is based on identity (n == node) while traversing the queue: we need
         // to know whether that specific reference is present, not whether there is
         // another node with the same state.
         // TODO: return ...
 
-        if(vacia())
+        if(nodo == null)
         {
             return false; 
         }
         else
         {
-            MinMaxPriorityQueue<Nodo> rollThrough = heap;
-            for(int i = 0; i<tamano(); i++)
+            for(Nodo node : heap)
             {
-                if(rollThrough.peekFirst() == nodo)
+                if(node == nodo)
                 {
                     return true;
-                } 
+                }
             }
             return false; 
         }
         
-
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 

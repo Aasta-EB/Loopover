@@ -1,4 +1,4 @@
-import java.util.function.LongToIntFunction;
+import java.util.function.ToIntFunction;
 
 /**
  * State-space search with configurable strategies and pruning based on
@@ -31,7 +31,7 @@ public final class Busqueda {
     private final Estrategia estrategia;
     private final int profundidadMaxima;
     private final int maxNodosArbol;
-    private final LongToIntFunction heuristica;
+    private final ToIntFunction<Estado> heuristica;
     private final long maxVisitados;
 
     private int nodosEnArbol;
@@ -42,23 +42,21 @@ public final class Busqueda {
 
     public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima) 
     {
-        this(estadoInicial, estrategia, profundidadMaxima, MAX_NODOS_POR_DEFECTO,
-                Heuristicas::heuristicaManhattanToroidal, 0L);
+        this(estadoInicial, estrategia, profundidadMaxima, MAX_NODOS_POR_DEFECTO, Heuristicas::heuristicaManhattanToroidal, 0L);
     }
 
     public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima,
                     int maxNodosArbol) {
-        this(estadoInicial, estrategia, profundidadMaxima, maxNodosArbol,
-                Heuristicas::heuristicaManhattanToroidal);
+        this(estadoInicial, estrategia, profundidadMaxima, maxNodosArbol, Heuristicas::heuristicaManhattanToroidal);
     }
 
     public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima,
-                    int maxNodosArbol, LongToIntFunction heuristica) {
+                    int maxNodosArbol, ToIntFunction<Estado> heuristica) {
         this(estadoInicial, estrategia, profundidadMaxima, maxNodosArbol, heuristica, 0L);
     }
 
     public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima,
-                    int maxNodosArbol, LongToIntFunction heuristica, long maxVisitados) {
+                    int maxNodosArbol, ToIntFunction<Estado> heuristica, long maxVisitados) {
         if (estadoInicial == null) throw new IllegalArgumentException("El estado inicial no puede ser nulo");
         if (estrategia == null)    throw new IllegalArgumentException("La estrategia no puede ser nula");
         if (profundidadMaxima < 0) throw new IllegalArgumentException("La profundidad maxima debe ser >= 0: " + profundidadMaxima);
@@ -79,34 +77,56 @@ public final class Busqueda {
     public Nodo buscar() {
         // TODO: implement the search loop
         Nodo newNode = new Nodo(estadoInicial);
+        newNode.fijarHeuristica(heuristica.applyAsInt(estadoInicial));
+        asignarValor(newNode);
 
-        Visitados visitedStates = new Visitados; 
+        Visitados visitedStates = new Visitados();
+        Frontera frontier = new Frontera(maxNodosArbol); 
+        frontier.insertar(newNode);
 
-        frontier = newNode; 
+        long time = System.currentTimeMillis();
 
-        while(!frontier.isEmpty())
+        while(!frontier.vacia())
         {
-            newNode = frontier.extraerMejor();
-            if(!registrarSiMejor(bestNode, valor))
+            Nodo actual = frontier.extraerMejor();
+
+            if(maxVisitados > 0 && visitedStates.tamano() >= maxVisitados)
             {
-                // discard
-            }
-            else
-            {
-                visitedStates.add(newNode);
+                limiteVisitadosAlcanzado = true; 
+                tiempoMs = System.currentTimeMillis() - time; 
+                return null; 
             }
 
-            if(esResuelto(newNode))
+            if(!visitedStates.registrarSiMejor(actual.estado().bitboard(), actual.valor()))
             {
-                return newNode; 
-            }
-            else
-            {
-                newNode = newNode.Frontera.extraerMejor();
+                continue; 
             }
 
+            estadosVisitados = visitedStates.tamano();
+            nodosExpandidos++;
+
+            if(actual.estado().esResuelto())
+            {
+                tiempoMs = System.currentTimeMillis() - time; 
+                return actual;
+            }
+
+            if(actual.profundidad() >= profundidadMaxima)
+            {
+                continue;
+            }
+
+            for(int i = 0; i < Estado.NUM_ACCIONES; i++)
+            {
+                Nodo child = new Nodo(actual, i);
+                child.fijarHeuristica(heuristica.applyAsInt(child.estado()));
+                asignarValor(child);
+                frontier.insertar(child);
+            }
         }
         
+        tiempoMs = System.currentTimeMillis() - time; 
+        return null; 
         // throw new UnsupportedOperationException("TODO: Tarea 2 - buscar()");
     }
  // _____________________________________________________________________________________________________________________________________________________
@@ -123,22 +143,23 @@ public final class Busqueda {
     private void asignarValor(Nodo nodo) {
         switch (estrategia) {
             case PROFUNDIDAD:
-                nodo.fijarValor(nodo);
-
-                throw new UnsupportedOperationException("TODO: Tarea 2 - PROFUNDIDAD");
+                nodo.fijarValor(-nodo.profundidad());
+                // throw new UnsupportedOperationException("TODO: Tarea 2 - PROFUNDIDAD");
                 break;
             
             case ANCHURA:
-
-                throw new UnsupportedOperationException("TODO: Tarea 2 - ANCHURA");
+                nodo.fijarValor(nodo.profundidad());
+                // throw new UnsupportedOperationException("TODO: Tarea 2 - ANCHURA");
                 break; 
             case COSTO_UNIFORME:
-
-                throw new UnsupportedOperationException("TODO: Tarea 2 - COSTO_UNIFORME");
+                nodo.fijarValor(nodo.costoAcumulado());
+                // throw new UnsupportedOperationException("TODO: Tarea 2 - COSTO_UNIFORME");
                 break;
                 
-            case VORAZ, A_ESTRELLA, A_ESTRELLA_ACOTADA -> throw new UnsupportedOperationException("TODO: Tarea 3 - estrategia informada");
-            default -> {}
+            case VORAZ, A_ESTRELLA, A_ESTRELLA_ACOTADA: throw new UnsupportedOperationException("TODO: Tarea 3 - estrategia informada");
+            default:
+                nodo.fijarValor(0);
+                break;
         }
     }
     // ____________________________________________________________________________________________________________________________________________________

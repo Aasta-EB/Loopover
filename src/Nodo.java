@@ -63,7 +63,9 @@ public final class Nodo implements Comparable<Nodo> {
         this.id = siguienteId++;
         this.profundidad = 0;
         this.costoAcumulado = 0; 
-        this.hijosPendientes = -1; // Is this really correct?
+        this.heuristica = 0;
+        this.valor = 0; 
+        this.hijosPendientes = -1;
         this.hijosVivos = 0; 
         this.expandido = false; 
 
@@ -97,10 +99,11 @@ public final class Nodo implements Comparable<Nodo> {
         this.padre = padre; 
         this.indiceAccion = indiceAccion; 
         this.id = siguienteId++;
-        
         this.bitboard = new Estado(padre.bitboard).aplicar(Estado.ACCIONES[indiceAccion]).bitboard(); 
         this.profundidad = padre.profundidad + 1;
         this.costoAcumulado = padre.costoAcumulado + costoAccion;
+        this.heuristica = 0;
+        this.valor = 0; 
         this.hijosPendientes = SIN_ACCION; 
         this.hijosVivos = 0; 
         this.expandido = false; 
@@ -194,7 +197,8 @@ public final class Nodo implements Comparable<Nodo> {
         }
         else
         {
-            throw new IllegalArgumentException("Something is wrong in compare to nodo.java"); 
+            return Long.compare(this.valor, otro.valor);
+            // throw new IllegalArgumentException("Something is wrong in compare to nodo.java"); 
         }
         
         // throw new UnsupportedOperationException("TODO: Tarea 2");
@@ -209,10 +213,10 @@ public final class Nodo implements Comparable<Nodo> {
 
         ObjectList<Nodo> collections = new ObjectArrayList<>();
         
-        Nodo aux = this.padre;
-        while(!(aux.padre == null) || !(aux == null))
+        Nodo aux = this;
+        while(!(aux == null))
         {
-            collections.add(aux.padre);
+            collections.add(aux);
             aux = aux.padre; 
         }
 
@@ -225,14 +229,28 @@ public final class Nodo implements Comparable<Nodo> {
     public String caminoComoTexto() {
         // TODO: construct text based on camino()
         StringBuilder buildString = new StringBuilder();
+        ObjectList<Nodo> camino = camino();
+        for(Nodo cam : camino)
+        {
+            if(cam.padre == null)
+            {
+                continue;
+            }
+            if(buildString.length() > 0)
+            {
+                buildString.append(' ');
+            }
+            buildString.append(Estado.accionComoTexto(Estado.ACCIONES[cam.accion()]));
+        }
+        /* 
         for(Nodo cam : camino())
         {
             buildString.append(cam); 
         }
 
         String caminoAsText = buildString.toString(); 
-
-        return caminoAsText;
+        */
+        return buildString.toString();
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
