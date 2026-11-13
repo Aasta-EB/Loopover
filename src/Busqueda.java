@@ -75,7 +75,6 @@ public final class Busqueda {
         // TODO: implement the search loop
 
         Nodo newNode = new Nodo(estadoInicial);
-        newNode.fijarHeuristica(heuristica.applyAsInt(estadoInicial));
         asignarValor(newNode);
 
         Visitados visitedStates = new Visitados();
