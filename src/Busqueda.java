@@ -31,7 +31,7 @@ public final class Busqueda {
     private final Estrategia estrategia;
     private final int profundidadMaxima;
     private final int maxNodosArbol;
-    private final ToIntFunction<Estado> heuristica;
+    private final ToIntFunction<Estado> heuristica; // This variable is changed due to LongToIntFunction making the constructors of this class undefined
     private final long maxVisitados;
 
     private int nodosEnArbol;
@@ -45,13 +45,11 @@ public final class Busqueda {
         this(estadoInicial, estrategia, profundidadMaxima, MAX_NODOS_POR_DEFECTO, Heuristicas::heuristicaManhattanToroidal, 0L);
     }
 
-    public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima,
-                    int maxNodosArbol) {
+    public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima, int maxNodosArbol) {
         this(estadoInicial, estrategia, profundidadMaxima, maxNodosArbol, Heuristicas::heuristicaManhattanToroidal);
     }
 
-    public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima,
-                    int maxNodosArbol, ToIntFunction<Estado> heuristica) {
+    public Busqueda(Estado estadoInicial, Estrategia estrategia, int profundidadMaxima, int maxNodosArbol, ToIntFunction<Estado> heuristica) {
         this(estadoInicial, estrategia, profundidadMaxima, maxNodosArbol, heuristica, 0L);
     }
 

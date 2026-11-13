@@ -230,26 +230,16 @@ public final class Nodo implements Comparable<Nodo> {
         // TODO: construct text based on camino()
         StringBuilder buildString = new StringBuilder();
         ObjectList<Nodo> camino = camino();
+        
         for(Nodo cam : camino)
         {
-            if(cam.padre == null)
-            {
-                continue;
-            }
             if(buildString.length() > 0)
             {
-                buildString.append(' ');
+                buildString.append('\n');
             }
-            buildString.append(Estado.accionComoTexto(Estado.ACCIONES[cam.accion()]));
-        }
-        /* 
-        for(Nodo cam : camino())
-        {
-            buildString.append(cam); 
+            buildString.append(cam.toString());
         }
 
-        String caminoAsText = buildString.toString(); 
-        */
         return buildString.toString();
         // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
