@@ -1,5 +1,3 @@
-import java.util.PriorityQueue;
-
 import com.google.common.collect.MinMaxPriorityQueue;
 
 /**
@@ -33,8 +31,8 @@ public final class Frontera {
         if (maxNodos < 1) throw new IllegalArgumentException("maxNodos debe ser >= 1: " + maxNodos);
         this.maxNodos = maxNodos;
         // TODO: initialize heap
+
         heap = MinMaxPriorityQueue.expectedSize(Math.min(maxNodos, 6536)).create();
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - Frontera(int)");
     }
 
     /** Number of nodes currently in the frontier. */
@@ -42,16 +40,12 @@ public final class Frontera {
         // TODO: return monticulo.size()
         
         return heap.size();
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public boolean vacia() {
         // TODO: return monticulo.isEmpty()
 
         return heap.isEmpty();
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public boolean contiene(Nodo nodo) {
@@ -75,29 +69,23 @@ public final class Frontera {
             }
             return false; 
         }
-        
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public void insertar(Nodo nodo) {
         // TODO: monticulo.add(nodo)
 
         heap.add(nodo);
-        
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**Extracts and returns the node with the lowest value (the most promising one). */
     public Nodo extraerMejor() {
         // TODO: check that it is not empty, return heap.pollFirst()
+        
         if (!heap.isEmpty()) {
             return heap.pollFirst();
         }
-        else
-        {
-            throw new IllegalArgumentException("1, heap is empty");
-        }
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
+
+        throw new IllegalArgumentException("1, heap is empty");
     }
 
     /**

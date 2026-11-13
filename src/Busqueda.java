@@ -68,12 +68,12 @@ public final class Busqueda {
         this.heuristica       = heuristica;
         this.maxVisitados     = maxVisitados;
     }
- // _____________________________________________________________________________________________________________________________________________________
     /**
      * Executes the search and returns the solution node, or null if none was found.
      */
     public Nodo buscar() {
         // TODO: implement the search loop
+
         Nodo newNode = new Nodo(estadoInicial);
         newNode.fijarHeuristica(heuristica.applyAsInt(estadoInicial));
         asignarValor(newNode);
@@ -125,16 +125,13 @@ public final class Busqueda {
         
         tiempoMs = System.currentTimeMillis() - time; 
         return null; 
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - buscar()");
     }
- // _____________________________________________________________________________________________________________________________________________________
 
     public int nodosExpandidos() { return nodosExpandidos; }
     public int estadosVisitados() { return estadosVisitados; }
     public long tiempoMs() { return tiempoMs; }
     public boolean limiteVisitadosAlcanzado() { return limiteVisitadosAlcanzado; }
 
-    // __________________________________________________________________________________________________________________________________________________
     /**
      * Assigns the node's sorting value according to the strategy.
      */
@@ -142,16 +139,13 @@ public final class Busqueda {
         switch (estrategia) {
             case PROFUNDIDAD:
                 nodo.fijarValor(-nodo.profundidad());
-                // throw new UnsupportedOperationException("TODO: Tarea 2 - PROFUNDIDAD");
                 break;
             
             case ANCHURA:
                 nodo.fijarValor(nodo.profundidad());
-                // throw new UnsupportedOperationException("TODO: Tarea 2 - ANCHURA");
                 break; 
             case COSTO_UNIFORME:
                 nodo.fijarValor(nodo.costoAcumulado());
-                // throw new UnsupportedOperationException("TODO: Tarea 2 - COSTO_UNIFORME");
                 break;
                 
             case VORAZ, A_ESTRELLA, A_ESTRELLA_ACOTADA: throw new UnsupportedOperationException("TODO: Tarea 3 - estrategia informada");
@@ -160,7 +154,6 @@ public final class Busqueda {
                 break;
         }
     }
-    // ____________________________________________________________________________________________________________________________________________________
 
     /**
      *For SMA*: frees memory by evicting a discardable page and returns true

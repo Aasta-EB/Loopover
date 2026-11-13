@@ -68,8 +68,6 @@ public final class Nodo implements Comparable<Nodo> {
         this.hijosPendientes = -1;
         this.hijosVivos = 0; 
         this.expandido = false; 
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Estado)");
     }
 
     /**
@@ -79,8 +77,6 @@ public final class Nodo implements Comparable<Nodo> {
     public Nodo(Nodo padre, int indiceAccion) {
         // TODO: this(padre, indiceAccion, 1)
         this(padre, indiceAccion, 1);
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int)");
     }
 
     /**
@@ -107,22 +103,19 @@ public final class Nodo implements Comparable<Nodo> {
         this.hijosPendientes = SIN_ACCION; 
         this.hijosVivos = 0; 
         this.expandido = false; 
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - Nodo(Nodo,int,int)");
     }
 
 
    public Estado estado() {
         // TODO: return estado
+
         return new Estado(bitboard); 
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public Nodo padre() {
         // TODO: return padre
         
         return this.padre; 
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /** Index 0..31 of the action applied to the parent in State.ACCIONES. */
@@ -130,40 +123,31 @@ public final class Nodo implements Comparable<Nodo> {
         // TODO: return indiceAccion
 
         return this.indiceAccion; 
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public int profundidad() {
         // TODO: return profundidad
 
         return profundidad; 
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public int costoAcumulado() {
         // TODO: return costoAcumulado
 
         return costoAcumulado; 
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public void fijarHeuristica(int heuristica) 
     { 
         this.heuristica = heuristica;
-        // throw new UnsupportedOperationException("TODO: Tarea 2"); 
     }
     public int valor() 
     { 
         return valor; 
-        // throw new UnsupportedOperationException("TODO: Tarea 2"); 
     }
     public void fijarValor(int valor) 
     {
         this.valor = valor; 
-        // throw new UnsupportedOperationException("TODO: Tarea 2"); 
     }
 
     // Gestion de hijos para SMA* — TODO: Tarea 3
@@ -179,8 +163,8 @@ public final class Nodo implements Comparable<Nodo> {
 
     public boolean esRaiz() {
         // TODO: return padre == null
+
         return padre == null; 
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -191,6 +175,7 @@ public final class Nodo implements Comparable<Nodo> {
     @Override
     public int compareTo(Nodo otro) {
         // TODO
+
         if(Integer.compare(this.valor, otro.valor) == 0)
         {
             return Long.compare(id, otro.id);
@@ -198,10 +183,7 @@ public final class Nodo implements Comparable<Nodo> {
         else
         {
             return Long.compare(this.valor, otro.valor);
-            // throw new IllegalArgumentException("Something is wrong in compare to nodo.java"); 
         }
-        
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -222,8 +204,6 @@ public final class Nodo implements Comparable<Nodo> {
 
         Collections.reverse(collections);
         return collections;
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public String caminoComoTexto() {
@@ -241,7 +221,6 @@ public final class Nodo implements Comparable<Nodo> {
         }
 
         return buildString.toString();
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -267,9 +246,6 @@ public final class Nodo implements Comparable<Nodo> {
         { 
             return false; 
         }
-        
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /** Consistent with equals(). */
@@ -277,8 +253,6 @@ public final class Nodo implements Comparable<Nodo> {
     public int hashCode() {
         
         return Long.hashCode(id);
-        
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     /**
@@ -313,10 +287,10 @@ public final class Nodo implements Comparable<Nodo> {
      */
     private static void validarIndice(int indiceAccion) {
         // TODO
+        
         if(!(indiceAccion >= 0 && indiceAccion <= Estado.NUM_ACCIONES -1))
         {
             throw new IllegalArgumentException("1, action index not in range");
         }
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - validarIndice");
     }
 }

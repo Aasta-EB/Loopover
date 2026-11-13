@@ -17,9 +17,8 @@ public final class Visitados {
 
     public Visitados() {
         // TODO: this.mapa = new Long2IntOpenHashMap()
+        
         this.mapa = new Long2IntOpenHashMap(); 
-
-        // throw new UnsupportedOperationException("TODO: Tarea 2 - Visitados()");
     }
 
     /**
@@ -34,7 +33,9 @@ public final class Visitados {
      */
     public boolean registrarSiMejor(long estado, int valor) {
         // TODO
+
         int previous = mapa.getOrDefault(estado, Integer.MAX_VALUE);
+
         if(Math.abs(valor) < previous)
         {
             mapa.put(estado, Math.abs(valor));
@@ -44,12 +45,11 @@ public final class Visitados {
         {
             return false; 
         } 
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 
     public int tamano() {
         // TODO: mapa.size()
+
         return mapa.size(); 
-        // throw new UnsupportedOperationException("TODO: Tarea 2");
     }
 }
